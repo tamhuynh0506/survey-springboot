@@ -1,0 +1,13 @@
+package dtos;
+
+import entities.User;
+
+import java.util.List;
+import java.util.UUID;
+
+public class ResponseDTO {
+    private UUID id;
+    private SurveyDTO survey;
+    private UserDTO user;
+    private List<AnswerDTO> answers;
+}
