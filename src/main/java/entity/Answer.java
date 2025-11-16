@@ -19,7 +19,7 @@ public class Answer {
     private Question question;
 
     @ManyToOne
-    private Response response;
+    private UserSubmission userSubmission;
 
     @ElementCollection
     private List<String> value; // supports multiple choices

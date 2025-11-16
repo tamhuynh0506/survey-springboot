@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-public class Response {
+public class UserSubmission {
     @Id
     @GeneratedValue
     private UUID id;

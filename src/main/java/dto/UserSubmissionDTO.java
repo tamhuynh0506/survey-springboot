@@ -3,7 +3,7 @@ package dto;
 import java.util.List;
 import java.util.UUID;
 
-public class ResponseDTO {
+public class UserSubmissionDTO {
     private UUID id;
     private SurveyDTO survey;
     private UserDTO user;

@@ -6,6 +6,6 @@ import java.util.UUID;
 public class AnswerDTO {
     private UUID id;
     private QuestionDTO question;
-    private ResponseDTO response;
+    private UserSubmissionDTO response;
     private List<String> value;
 }
