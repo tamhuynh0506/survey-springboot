@@ -1,6 +1,6 @@
-package dtos;
+package dto;
 
-import entities.User;
+import entity.User;
 
 import java.util.UUID;
 

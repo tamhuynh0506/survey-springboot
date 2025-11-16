@@ -1,6 +1,6 @@
-package dtos;
+package dto;
 
-import entities.Question;
+import entity.Question;
 
 import java.util.List;
 import java.util.UUID;
