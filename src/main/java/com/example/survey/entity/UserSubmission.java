@@ -1,4 +1,4 @@
-package entity;
+package com.example.survey.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +24,6 @@ public class UserSubmission {
 
     private Instant submittedAt = Instant.now();
 
-    @OneToMany(mappedBy = "response", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userSubmission", cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

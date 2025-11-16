@@ -1,10 +1,14 @@
-package dto;
+package com.example.survey.dto;
 
-import entity.Question;
+import com.example.survey.entity.Question;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class QuestionDTO {
     private UUID id;
     private String text;
