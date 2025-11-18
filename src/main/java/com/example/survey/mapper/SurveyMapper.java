@@ -10,12 +10,8 @@ import org.mapstruct.*;
 public interface SurveyMapper {
     SurveyDTO toDTO(Survey survey);
 
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     Survey toEntity(SurveyDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
     void updateSurvey(SurveyDTO dto, @MappingTarget Survey survey);
 }

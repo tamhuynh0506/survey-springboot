@@ -10,10 +10,8 @@ import org.mapstruct.*;
 public interface UserSubmissionMapper {
     UserSubmissionDTO toDTO(UserSubmission userSubmission);
 
-    @Mapping(target = "submittedAt", ignore = true)
     UserSubmission toEntity(UserSubmissionDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "submittedAt", ignore = true)
     void updateUserSubmission(UserSubmissionDTO dto, @MappingTarget UserSubmission userSubmission);
 }
