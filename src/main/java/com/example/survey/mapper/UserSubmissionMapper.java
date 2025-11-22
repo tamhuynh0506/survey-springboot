@@ -4,9 +4,7 @@ import com.example.survey.dto.UserSubmissionDTO;
 import com.example.survey.entity.UserSubmission;
 import org.mapstruct.*;
 
-@Mapper(
-        componentModel = "spring"
-)
+@Mapper(componentModel = "spring")
 public interface UserSubmissionMapper {
     UserSubmissionDTO toDTO(UserSubmission userSubmission);
 

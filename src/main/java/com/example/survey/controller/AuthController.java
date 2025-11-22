@@ -50,8 +50,9 @@ public class AuthController {
         User user = userRepository.findByVerificationToken(token)
                 .orElseThrow(InvalidTokenException::new);
 
-        if (user.getVerificationTokenExpiry().before(new Date()))
+        if (user.getVerificationTokenExpiry().before(new Date())) {
             throw new TokenExpiredException();
+        }
 
         user.setEmailVerified(true);
         user.setVerificationToken(null);
