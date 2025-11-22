@@ -43,4 +43,10 @@ public class ApiResponse<T> {
         ApiResponse<T> responseBody = new ApiResponse<>(status, message);
         return new ResponseEntity<>(responseBody, status);
     }
+
+    /** Returns a invalid method arguments error response with error fields. */
+    public static <T> ResponseEntity<ApiResponse<T>> invalidMethodArguments(String message, T data) {
+        ApiResponse<T> responseBody = new ApiResponse<>(HttpStatus.BAD_REQUEST, message, data);
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
+    }
 }

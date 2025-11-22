@@ -1,6 +1,6 @@
 package com.example.survey.exception;
 
-public abstract class ApiException extends RuntimeException {
+public class ApiException extends RuntimeException {
     public ApiException(String message) {
         super(message);
     }
