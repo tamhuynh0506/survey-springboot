@@ -45,6 +45,10 @@ public class AuthService {
         user.setPassword(encodedPassword);
         user.setRole(User.Role.USER);
 
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+        user.setVerificationTokenExpiry(new Date(System.currentTimeMillis() + 3600_000)); // 1hr
+
         userRepository.save(user);
     }
 }
