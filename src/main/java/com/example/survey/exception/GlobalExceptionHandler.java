@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
         return ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<Object>> handleRuntime(RuntimeException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
         return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
     }
 
