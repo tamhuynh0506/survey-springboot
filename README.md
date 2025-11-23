@@ -1,6 +1,6 @@
 Learned Features:
 - JPA Repository
-- Mapper DTO - Entity using MapStruct
+- Mapper DTO - Entity using MapStruct (lombok must before map struct in dependencies order)
 - Add relationship when create entities in entity classes (e.g: @ManyToOne)
 - DTO fields validation raises MethodArgumentNotValidException
 - Only class that represent a bean can be injected:

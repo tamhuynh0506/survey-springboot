@@ -1,16 +1,18 @@
 package com.example.survey.controller;
 
 import com.example.survey.ApiResponse;
+import com.example.survey.config.JwtConfigProperties;
+import com.example.survey.dto.LoginDTO;
 import com.example.survey.dto.RegisterDTO;
 import com.example.survey.dto.UserDTO;
+import com.example.survey.entity.RefreshToken;
 import com.example.survey.entity.User;
-import com.example.survey.exception.ApiException;
-import com.example.survey.exception.InvalidTokenException;
-import com.example.survey.exception.TokenExpiredException;
-import com.example.survey.exception.UserNotFoundException;
+import com.example.survey.exception.*;
 import com.example.survey.mapper.UserMapper;
 import com.example.survey.repository.UserRepository;
 import com.example.survey.service.AuthService;
+import com.example.survey.service.RefreshTokenService;
+import com.example.survey.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,16 +26,43 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final JwtConfigProperties jwtConfigProperties;
 
-    public AuthController(AuthService authService, UserRepository userRepository, UserMapper userMapper,
-                          PasswordEncoder passwordEncoder) {
+    public AuthController(AuthService authService,
+                          RefreshTokenService refreshTokenService,
+                          UserRepository userRepository,
+                          UserMapper userMapper,
+                          PasswordEncoder passwordEncoder,
+                          JwtUtil jwtUtil, JwtConfigProperties jwtConfigProperties) {
         this.authService = authService;
+        this.refreshTokenService = refreshTokenService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.jwtConfigProperties = jwtConfigProperties;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<Map<String, String>>> login(@RequestBody @Valid LoginDTO loginDTO) {
+        User user = userRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(user.getPassword(), loginDTO.getPassword())) {
+            throw new PasswordsDoNotMatchException();
+        }
+
+        String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().toString());
+        RefreshToken refreshToken = refreshTokenService.create(user, jwtConfigProperties.refresh().expirationMs());
+
+        Map<String, String> tokens = Map.of("accessToken", accessToken, "refreshToken", refreshToken.getId());
+
+        return ApiResponse.success("Login successfully", tokens);
     }
 
     @PostMapping("/register")
@@ -41,6 +70,7 @@ public class AuthController {
         authService.register(registerDTO);
         User user = userRepository.findByEmail(registerDTO.getEmail())
                 .orElseThrow(() -> new ApiException("Error when create user"));
+
         UserDTO userDTO = userMapper.toDTO(user);
         return ApiResponse.created("User registered successfully", userDTO);
     }
