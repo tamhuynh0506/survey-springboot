@@ -10,6 +10,17 @@ Learned Features:
     + @Mapper(componentModel = "spring")
     + @RestController
     + ...
+  
+- PUT: full update | PATCH: partial update
+
+```
+  public       static                    <T>        ResponseEntity<ApiResponse<T>>    success(...)
+               ──┬──                    ──┬──       ────────────────┬─────────────
+          call this method        declares T exists        return type uses T
+          without creating 
+          an object of the class.          
+```
+
 
 Learned Designs:
 - Use abstract class ApiException and its constructor to:
