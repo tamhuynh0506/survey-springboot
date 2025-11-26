@@ -57,7 +57,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByEmail(loginDTO.getEmail())
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             throw new PasswordsDoNotMatchException();
@@ -113,7 +113,7 @@ public class AuthService {
 
     public String forgotPassword(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
 
         String token = UUID.randomUUID().toString();
         user.setResetPasswordToken(token);
@@ -124,7 +124,7 @@ public class AuthService {
 
     public void resetPassword(String token, String newPassword) {
         User user = userRepository.findByResetPasswordToken(token)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
 
         if (user.getResetPasswordExpiry().before(new Date())) {
             throw new TokenExpiredException();
@@ -135,7 +135,6 @@ public class AuthService {
 
         userRepository.save(user);
     }
-
 
     public Map<String, String> refresh(String refreshToken) {
         RefreshToken storedToken = refreshTokenRepository.findById(refreshToken)

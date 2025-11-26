@@ -1,7 +1,7 @@
 package com.example.survey.service;
 
 import com.example.survey.entity.User;
-import com.example.survey.exception.UserNotFoundException;
+import com.example.survey.exception.NotFoundException;
 import com.example.survey.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())

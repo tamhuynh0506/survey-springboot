@@ -20,8 +20,88 @@ Learned Features:
           without creating 
           an object of the class.          
 ```
+- OncePerRequestFilter:
+  - Ensures logic only executes once, preventing bugs like:
+    + Double authentication 
+    + Double logging 
+    + Extra DB calls 
+       
+  - Used for custom security filters. For example:
+    + JWT authentication
+    + Logging request metadata 
+    + IP checking
+    + Rate limiting (simple per-request checks)
+  
+- Spring Security has UserDetailsService that need to know how we are getting user then use that user in doFilterInternal method
+- Combined Spring Security lifecycle diagram:
+``` 
+    Client HTTP Request
+              │
+              ▼
+┌───────────────────────────────┐
+│  Servlet Container (Tomcat)   │
+│  Receives HTTP request        │
+└───────────────────────────────┘
+              │
+              ▼
+┌───────────────────────────────┐
+│  springSecurityFilterChain    │  ← Your SecurityFilterChain bean
+│  (called automatically)       │
+└───────────────────────────────┘
+              │
+              ▼
+┌──────────────────────────────────────────┐
+│  JwtAuthFilter (OncePerRequestFilter)    │
+│  - Extract JWT from Authorization header │
+│  - Validate token                        │
+│  - Load user details                     │
+│  - Set Authentication in SecurityContext │
+└──────────────────────────────────────────┘
+              │
+              ▼
+┌─────────────────────────────────────────┐
+│  Other Security Filters                 │
+│  - UsernamePasswordAuthenticationFilter │
+│  - FilterSecurityInterceptor            │
+│  - CsrfFilter / CorsFilter              │
+└─────────────────────────────────────────┘
+              │
+              ▼
+┌──────────────────────────────────────────────┐
+│  Authentication present?                     │
+│  ┌─────────────┐                             │
+│  │ YES         │ → Continue to authorization │
+│  └─────────────┘                             │
+│  ┌─────────────┐                             │
+│  │ NO          │ → Trigger                   │
+│  │             │   AuthenticationEntryPoint  │
+│  │             │   (401 Unauthorized)        │
+│  └─────────────┘                             │
+└──────────────────────────────────────────────┘
+              │
+              ▼
+┌──────────────────────────────────────────────────┐
+│  Authorization check (FilterSecurityInterceptor) │
+│  Has required role/authority?                    │
+│  ┌─────────────┐                                 │
+│  │ YES         │ → Continue to Controller        │
+│  └─────────────┘                                 │
+│  ┌─────────────┐                                 │
+│  │ NO          │ → Trigger                       │
+│  │             │   AccessDeniedHandler           │
+│  │             │   (403 Forbidden)               │
+│  └─────────────┘                                 │
+└──────────────────────────────────────────────────┘
+              │
+              ▼
+┌───────────────────────────────┐
+│  Controller / REST endpoint   │  ← Only called if authenticated & authorized
+└───────────────────────────────┘
+              │
+              ▼
+       Client HTTP Response
 
-
+```
 Learned Designs:
 - Use abstract class ApiException and its constructor to:
     + Create custom exceptions: extends ApiException class

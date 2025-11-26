@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
-        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,4 +32,5 @@ public class GlobalExceptionHandler {
 
         return ApiResponse.invalidMethodArguments("Invalid arguments", errors);
     }
+
 }
