@@ -5,19 +5,16 @@ import com.example.survey.entity.Survey;
 import com.example.survey.exception.NotFoundException;
 import com.example.survey.mapper.SurveyMapper;
 import com.example.survey.repository.SurveyRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final SurveyMapper surveyMapper;
-
-    public SurveyService(SurveyRepository surveyRepository, SurveyMapper surveyMapper) {
-        this.surveyRepository = surveyRepository;
-        this.surveyMapper = surveyMapper;
-    }
 
     public SurveyDTO getById(UUID id) {
         Survey survey = surveyRepository.findById(id)

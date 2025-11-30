@@ -4,6 +4,7 @@ import com.example.survey.ApiResponse;
 import com.example.survey.dto.SurveyDTO;
 import com.example.survey.service.SurveyService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/survey")
+@RequiredArgsConstructor
 public class SurveyController {
 
     private final SurveyService surveyService;
-
-    public SurveyController(SurveyService surveyService) {
-        this.surveyService = surveyService;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<SurveyDTO>> get(@PathVariable UUID id) {

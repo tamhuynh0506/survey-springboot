@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     Optional<Survey> findById(UUID id);
+    long countByPublished(boolean isPublished);
 }

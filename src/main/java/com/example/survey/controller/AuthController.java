@@ -6,6 +6,7 @@ import com.example.survey.dto.RegisterDTO;
 import com.example.survey.dto.UserDTO;
 import com.example.survey.service.AuthService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +14,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<Map<String, String>>> login(@RequestBody @Valid LoginDTO loginDTO) {
-        Map<String, String> tokens = authService.login(loginDTO);
-        return ApiResponse.success("Login successfully", tokens);
+        return ApiResponse.success("Login successfully", authService.login(loginDTO));
     }
 
     @PostMapping("/register")

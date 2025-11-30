@@ -6,18 +6,16 @@ import com.example.survey.exception.InvalidTokenException;
 import com.example.survey.exception.TokenExpiredException;
 import com.example.survey.exception.TokenRevokedException;
 import com.example.survey.repository.RefreshTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
-
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
 
     public RefreshToken create(User user, long refreshExpMs) {
         RefreshToken refreshToken = new RefreshToken();

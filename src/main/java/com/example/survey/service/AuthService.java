@@ -12,6 +12,7 @@ import com.example.survey.repository.RefreshTokenRepository;
 import com.example.survey.repository.UserRepository;
 
 import com.example.survey.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -32,24 +34,6 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final JwtConfigProperties jwtConfigProperties;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       UserMapper userMapper,
-                       AuthenticationManager authenticationManager,
-                       JwtUtil jwtUtil,
-                       RefreshTokenService refreshTokenService,
-                       JwtConfigProperties jwtConfigProperties,
-                       RefreshTokenRepository refreshTokenRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.refreshTokenService = refreshTokenService;
-        this.jwtConfigProperties = jwtConfigProperties;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
 
     public Map<String, String> login(LoginDTO loginDTO) {
         authenticationManager.authenticate(
@@ -63,7 +47,7 @@ public class AuthService {
             throw new PasswordsDoNotMatchException();
         }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().toString());
+        String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().name());
         RefreshToken refreshToken = refreshTokenService.create(user, jwtConfigProperties.refresh().expirationMs());
 
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken.getId());
@@ -84,7 +68,7 @@ public class AuthService {
         user.setEmail(registerDTO.getEmail());
         user.setName(registerDTO.getName());
         user.setPassword(encodedPassword);
-        user.setRole(User.Role.USER);
+        user.setRole(registerDTO.getRole());
 
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
