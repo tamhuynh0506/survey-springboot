@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Question {
     private Type type;
 
     @ElementCollection
-    private List<String> options;
+    private List<String> options = new ArrayList<>();
 
     @ManyToOne
     private Survey survey;
