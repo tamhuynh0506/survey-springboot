@@ -20,6 +20,13 @@ Learned Features:
           without creating 
           an object of the class.          
 ```
+
+- TODO: about mapper, need to dive in more and more to make notes
+
+- Add @EnableMethodSecurity(prePostEnabled = true) to use @PreAuthorize
+
+- Add @AllArgsConstructor (All fields) or @RequiredArgsConstructor (final + @NonNull fields only) to auto create constructors
+
 - OncePerRequestFilter:
   - Ensures logic only executes once, preventing bugs like:
     + Double authentication 
