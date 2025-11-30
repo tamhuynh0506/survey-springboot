@@ -7,9 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,11 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final JwtAuthFilter jwtFilter;
     private final ObjectMapper objectMapper;
@@ -48,17 +48,8 @@ public class SecurityConfig {
         return (HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) -> {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType("application/json");
-            ApiResponse<Object> body = new ApiResponse<>(HttpStatus.UNAUTHORIZED, "Access denied", null);
-            response.getWriter().write(body.toJson(objectMapper));
-        };
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) -> {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.setContentType("application/json");
-            ApiResponse<Object> body = new ApiResponse<>(HttpStatus.FORBIDDEN, "You don't have permission", null);
+            ApiResponse<Object> body = new ApiResponse<>(HttpStatus.UNAUTHORIZED,
+                    "Please login to continue", null);
             response.getWriter().write(body.toJson(objectMapper));
         };
     }
@@ -72,7 +63,6 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(authenticationEntryPoint())
-                        .accessDeniedHandler(accessDeniedHandler())
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -5,6 +5,7 @@ import com.example.survey.dto.SurveyDTO;
 import com.example.survey.service.SurveyService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class SurveyController {
         return ApiResponse.success("Success", surveyService.getById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<UUID>> create(@Valid @RequestBody SurveyDTO dto) {
         return ApiResponse.created("Create survey successfully", surveyService.create(dto));
