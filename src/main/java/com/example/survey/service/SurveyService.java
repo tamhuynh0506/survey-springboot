@@ -6,6 +6,10 @@ import com.example.survey.exception.NotFoundException;
 import com.example.survey.mapper.SurveyMapper;
 import com.example.survey.repository.SurveyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -27,5 +31,18 @@ public class SurveyService {
         Survey survey = surveyMapper.toEntity(dto);
         surveyRepository.save(survey);
         return survey.getId();
+    }
+
+    public Page<SurveyDTO> getAllSurveys(int page, int size, String sortBy, String direction) {
+
+        Sort sort = "desc".equalsIgnoreCase(direction)
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Survey> surveyPage = surveyRepository.findAll(pageable);
+
+        return surveyMapper.toDtoPage(surveyPage);
     }
 }
