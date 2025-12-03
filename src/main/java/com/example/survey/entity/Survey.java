@@ -15,15 +15,15 @@ public class Survey {
     @Id
     @GeneratedValue
     private UUID id;
-
     private String title;
     private String description;
     private boolean published;
     private Instant createdAt = Instant.now();
-
-    @ManyToOne
-    private User createdBy;
+    private UUID createdBy;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
+
+    @OneToMany(mappedBy="survey")
+    private List<UserSubmission> userSubmissions;
 }

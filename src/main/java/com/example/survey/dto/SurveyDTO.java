@@ -19,4 +19,5 @@ public class SurveyDTO {
     private boolean published = Boolean.FALSE;
     @NotEmpty(message = "Questions list must not be empty")
     private List<QuestionDTO> questions;
+    private UUID createdBy;
 }

@@ -1,5 +1,7 @@
 Learned Features:
-- JPA Repository
+- JPA Repository:
+    + @Query: to create complex queries and can select into a DTO
+    + Can return Page objects to work with pagination
 - Mapper DTO - Entity using MapStruct (lombok must before map struct in dependencies order)
 - Add relationship when create entities in entity classes (e.g: @ManyToOne)
 - DTO fields validation raises MethodArgumentNotValidException
@@ -12,6 +14,7 @@ Learned Features:
     + ...
   
 - PUT: full update | PATCH: partial update
+- Can get info from SecurityContextHolder.getContext().getAuthentication()
 
 ```
   public       static                    <T>        ResponseEntity<ApiResponse<T>>    success(...)

@@ -1,5 +1,6 @@
 package com.example.survey.config;
 
+import com.example.survey.entity.CustomUserDetails;
 import com.example.survey.service.CustomUserDetailsService;
 import com.example.survey.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -31,8 +32,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = h.substring(7);
             if (jwtUtil.isAccessTokenValid(token)) {
                 String email = jwtUtil.extractEmailFromAccess(token);
-                var userDetails = userDetailsService.loadUserByUsername(email);
-                var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                CustomUserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
