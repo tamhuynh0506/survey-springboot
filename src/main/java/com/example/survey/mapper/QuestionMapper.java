@@ -2,7 +2,6 @@ package com.example.survey.mapper;
 
 import com.example.survey.dto.QuestionDTO;
 import com.example.survey.entity.Question;
-import com.example.survey.entity.Survey;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
