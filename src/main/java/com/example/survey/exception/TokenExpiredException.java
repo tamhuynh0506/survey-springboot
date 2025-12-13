@@ -1,7 +1,9 @@
 package com.example.survey.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class TokenExpiredException extends ApiException {
     public TokenExpiredException() {
-        super("Token expired");
+        super(HttpStatus.UNAUTHORIZED, "Token expired");
     }
 }

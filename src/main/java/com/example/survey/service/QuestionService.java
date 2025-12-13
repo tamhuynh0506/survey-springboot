@@ -19,7 +19,8 @@ public class QuestionService {
     private final QuestionMapper questionMapper;
 
     public QuestionDTO getById(UUID id) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("Question"));
+        Question question = questionRepository.findById(id).orElseThrow(
+            () -> new NotFoundException(Question.class));
         return questionMapper.toDTO(question);
     }
 }

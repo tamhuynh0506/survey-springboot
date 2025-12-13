@@ -21,7 +21,8 @@ public class SurveyService {
     private final SurveyMapper surveyMapper;
 
     public SurveyDTO getById(UUID id) {
-        Survey survey = surveyRepository.findById(id).orElseThrow(() -> new NotFoundException("Survey"));
+        Survey survey = surveyRepository.findById(id).orElseThrow(
+            () -> new NotFoundException(Survey.class));
         return surveyMapper.toDTO(survey);
     }
 

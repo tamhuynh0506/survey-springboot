@@ -40,7 +40,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
         User user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
-                () -> new NotFoundException("User"));
+                () -> new NotFoundException(User.class));
 
         String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().name());
         RefreshToken refreshToken = refreshTokenService.create(user, jwtConfigProperties.refresh().expirationMs());
@@ -72,7 +72,7 @@ public class AuthService {
         userRepository.save(user);
 
         User createdUser = userRepository.findByEmail(registerDTO.getEmail())
-                .orElseThrow(() -> new ApiException("Error when create user"));
+                .orElseThrow(() -> new NotFoundException(User.class));
 
         return userMapper.toDTO(createdUser);
     }
@@ -92,7 +92,7 @@ public class AuthService {
 
     public String forgotPassword(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("User"));
+                () -> new NotFoundException(User.class));
 
         String token = UUID.randomUUID().toString();
         user.setResetPasswordToken(token);
@@ -103,7 +103,7 @@ public class AuthService {
 
     public void resetPassword(String token, String newPassword) {
         User user = userRepository.findByResetPasswordToken(token).orElseThrow(
-                () -> new NotFoundException("User"));
+                () -> new NotFoundException(User.class));
 
         if (user.getResetPasswordExpiry().before(new Date())) {
             throw new TokenExpiredException();
