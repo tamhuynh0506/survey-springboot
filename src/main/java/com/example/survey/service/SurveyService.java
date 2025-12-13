@@ -2,11 +2,11 @@ package com.example.survey.service;
 
 import com.example.survey.dto.SurveyDTO;
 import com.example.survey.entity.Survey;
+import com.example.survey.exception.NotFoundException;
 import com.example.survey.mapper.SurveyMapper;
 import com.example.survey.repository.SurveyRepository;
 import com.example.survey.util.PageUtil;
 import com.example.survey.util.SecurityUtil;
-import com.example.survey.util.FetchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public class SurveyService {
     private final SurveyMapper surveyMapper;
 
     public SurveyDTO getById(UUID id) {
-        Survey survey = FetchUtil.orThrow(surveyRepository.findById(id), Survey.class);
+        Survey survey = surveyRepository.findById(id).orElseThrow(() -> new NotFoundException("Survey"));
         return surveyMapper.toDTO(survey);
     }
 

@@ -2,8 +2,8 @@ package com.example.survey.service;
 
 import com.example.survey.entity.CustomUserDetails;
 import com.example.survey.entity.User;
+import com.example.survey.exception.NotFoundException;
 import com.example.survey.repository.UserRepository;
-import com.example.survey.util.FetchUtil;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = FetchUtil.orThrow(userRepository.findByEmail(email), User.class);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User"));
         return new CustomUserDetails(
                user.getId(),
                user.getEmail(),

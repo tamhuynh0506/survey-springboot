@@ -12,7 +12,6 @@ import com.example.survey.repository.RefreshTokenRepository;
 import com.example.survey.repository.UserRepository;
 
 import com.example.survey.util.JwtUtil;
-import com.example.survey.util.FetchUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +39,8 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
-        User user = FetchUtil.orThrow(userRepository.findByEmail(loginDTO.getEmail()), User.class);
+        User user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
+                () -> new NotFoundException("User"));
 
         String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().name());
         RefreshToken refreshToken = refreshTokenService.create(user, jwtConfigProperties.refresh().expirationMs());
@@ -91,7 +91,8 @@ public class AuthService {
     }
 
     public String forgotPassword(String email) {
-        User user = FetchUtil.orThrow(userRepository.findByEmail(email), User.class);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User"));
 
         String token = UUID.randomUUID().toString();
         user.setResetPasswordToken(token);
@@ -101,7 +102,8 @@ public class AuthService {
     }
 
     public void resetPassword(String token, String newPassword) {
-        User user = FetchUtil.orThrow(userRepository.findByResetPasswordToken(token), User.class);
+        User user = userRepository.findByResetPasswordToken(token).orElseThrow(
+                () -> new NotFoundException("User"));
 
         if (user.getResetPasswordExpiry().before(new Date())) {
             throw new TokenExpiredException();
