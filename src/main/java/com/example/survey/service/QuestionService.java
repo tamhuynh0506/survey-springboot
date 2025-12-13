@@ -2,9 +2,10 @@ package com.example.survey.service;
 
 import com.example.survey.dto.QuestionDTO;
 import com.example.survey.entity.Question;
-import com.example.survey.exception.NotFoundException;
 import com.example.survey.mapper.QuestionMapper;
 import com.example.survey.repository.QuestionRepository;
+import com.example.survey.util.FetchUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,7 @@ public class QuestionService {
     private final QuestionMapper questionMapper;
 
     public QuestionDTO getById(UUID id) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-
+        Question question = FetchUtil.orThrow(questionRepository.findById(id), Question.class);
         return questionMapper.toDTO(question);
     }
 }
