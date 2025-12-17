@@ -14,14 +14,15 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - db
+      - "5006:5005" # VS Code JDWP attach
     volumes:
-      - .:/app          # Mount local code into container
-      - /app/build      # Optional: cache build artifacts
+      - ./build/classes/java/main:/app/classes
+      - ./build/resources/main:/app/resources
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
       - SPRING_DATASOURCE_USERNAME=user

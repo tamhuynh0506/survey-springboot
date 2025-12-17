@@ -1,23 +1,14 @@
-FROM gradle:9-jdk
 FROM eclipse-temurin:21-jdk-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy Gradle wrapper and config first for caching
-COPY gradle gradle
-COPY gradlew .
-COPY build.gradle .
-COPY settings.gradle .
+COPY build/libs/*.jar app.jar
 
-# Download dependencies only (cached layer)
-RUN ./gradlew build -x test || true
+EXPOSE 8080 5005
 
-# Copy the rest of the project
-COPY . .
-
-# Expose app port
-EXPOSE 8080
-
-# Run Spring Boot in dev mode with Gradle bootRun
-CMD ["./gradlew", "bootRun"]
+CMD ["java",\
+ "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005",\
+ "-Dspring.devtools.restart.enabled=true",\
+ "-Dspring.devtools.restart.additional-paths=/app/classes",\
+ "-jar",\
+ "app.jar"]
