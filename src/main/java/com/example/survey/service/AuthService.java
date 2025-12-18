@@ -42,7 +42,7 @@ public class AuthService {
         User user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
                 () -> new NotFoundException(User.class));
 
-        String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole().name());
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole().name());
         RefreshToken refreshToken = refreshTokenService.create(user, jwtConfigProperties.refresh().expirationMs());
 
         return Map.of("accessToken", accessToken, "refreshToken", refreshToken.getId());
@@ -119,11 +119,12 @@ public class AuthService {
         RefreshToken storedToken = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow(InvalidTokenException::new);
 
-        String email = jwtUtil.extractEmailFromRefresh(storedToken.getId());
-        User user = userRepository.findByEmail(email).orElseThrow();
+        UUID userId = jwtUtil.extractUserIdFromRefresh(storedToken.getId());
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new NotFoundException(User.class));
 
-        String accessToken = jwtUtil.generateAccessToken(email, user.getRole().toString());
-        String newRefresh = jwtUtil.generateRefreshToken(email);
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole().toString());
+        String newRefresh = jwtUtil.generateRefreshToken(user.getId());
 
         storedToken.setId(newRefresh);
         storedToken.setExpiryDate(new Date(System.currentTimeMillis() + 3600_000));

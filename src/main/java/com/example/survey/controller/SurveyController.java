@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/surveys")
 @RequiredArgsConstructor
 public class SurveyController {
 
