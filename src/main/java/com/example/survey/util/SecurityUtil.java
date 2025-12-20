@@ -13,7 +13,7 @@ public class SecurityUtil {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof CustomUserDetails user) {
-            return user.getId();
+            return user.getUserId();
         }
 
         return null;

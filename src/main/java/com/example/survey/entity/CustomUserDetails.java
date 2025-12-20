@@ -9,13 +9,13 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private final UUID id;
+    private final UUID userId;
     private final String email;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UUID getId() {
-        return id;
+    public UUID getUserId() {
+        return userId;
     }
 
     @Override

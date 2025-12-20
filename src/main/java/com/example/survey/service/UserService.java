@@ -18,10 +18,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    
+
     public UserDTO getCurrentUser(UUID userId) {
-       User user = userRepository.findById(userId).orElseThrow(
-        () -> new NotFoundException(User.class));
-       return userMapper.toDTO(user);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException(User.class));
+        return userMapper.toDTO(user);
     }
 }
