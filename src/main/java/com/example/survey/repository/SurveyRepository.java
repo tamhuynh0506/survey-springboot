@@ -2,6 +2,8 @@ package com.example.survey.repository;
 
 import com.example.survey.dto.dashboard.DashboardSurveysOverviewDTO;
 import com.example.survey.entity.Survey;
+import com.example.survey.entity.Survey.SurveyStatus;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +14,7 @@ import java.util.UUID;
 
 public interface SurveyRepository extends JpaRepository<Survey, UUID> {
     Optional<Survey> findById(UUID id);
-    long countByPublished(boolean isPublished);
+    long countByStatus(SurveyStatus status);
 
     @Query("""
         SELECT new com.example.survey.dto.dashboard.DashboardSurveysOverviewDTO (
@@ -20,7 +22,7 @@ public interface SurveyRepository extends JpaRepository<Survey, UUID> {
             s.title,
             SIZE(s.questions),
             COUNT(us),
-            s.published,
+            CASE WHEN s.status = 'PUBLISHED' THEN true ELSE false END,
             MAX(us.submittedAt)
         )
         FROM Survey s

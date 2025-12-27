@@ -16,5 +16,4 @@ public class QuestionDTO {
     private String text;
     private List<String> options;
     private Question.Type type;
-    private SurveyDTO survey;
 }

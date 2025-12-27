@@ -7,7 +7,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
 
-    @Mapping(target = "survey", ignore = true)
     QuestionDTO toDTO(Question question);
 
     Question toEntity(QuestionDTO questionDTO);

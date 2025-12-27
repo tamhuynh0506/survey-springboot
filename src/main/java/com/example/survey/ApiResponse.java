@@ -27,6 +27,14 @@ public class ApiResponse<T> {
         return build(HttpStatus.OK, message, data);
     }
 
+    public static <T> ResponseEntity<ApiResponse<T>> success(String message) {
+        return build(HttpStatus.OK, message, null);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> success() {
+        return build(HttpStatus.OK, "Success", null);
+    }
+
     /** Returns a 201 CREATED response with data. */
     public static <T> ResponseEntity<ApiResponse<T>> created(String message, T data) {
         return build(HttpStatus.CREATED, message, data);
@@ -37,8 +45,8 @@ public class ApiResponse<T> {
         return build(status, message, null);
     }
 
-    /** Returns a invalid method arguments error response with error fields. */
-    public static <T> ResponseEntity<ApiResponse<T>> invalidMethodArguments(String message, T errors) {
+    /** Returns a invalid data error response. */
+    public static <T> ResponseEntity<ApiResponse<T>> invalidData(String message, T errors) {
         return build(HttpStatus.BAD_REQUEST, message, errors);
     }
 

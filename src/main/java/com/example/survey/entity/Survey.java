@@ -17,13 +17,29 @@ public class Survey {
     private UUID id;
     private String title;
     private String description;
-    private boolean published;
     private Instant createdAt = Instant.now();
     private UUID createdBy;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 
-    @OneToMany(mappedBy="survey")
+    @OneToMany(mappedBy = "survey")
     private List<UserSubmission> userSubmissions;
+
+    @Enumerated(EnumType.STRING)
+    private SurveyStatus status = SurveyStatus.DRAFT;
+
+    public enum SurveyStatus {
+        DRAFT,      // Created but not visible
+        PUBLISHED,  // Live and accepting responses
+        CLOSED      // No longer accepts responses
+    }
+
+    private Instant publishedAt;
+    private Instant closedAt;
+
+    public void publish(Instant time) {
+        this.status = SurveyStatus.PUBLISHED;
+        this.publishedAt = time;
+    }
 }

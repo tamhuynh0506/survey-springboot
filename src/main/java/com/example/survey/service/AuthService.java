@@ -37,9 +37,9 @@ public class AuthService {
 
     public Map<String, String> login(LoginDTO loginDTO) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password()));
 
-        User user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
+        User user = userRepository.findByEmail(loginDTO.email()).orElseThrow(
                 () -> new NotFoundException(User.class));
 
         String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail(), user.getRole().name());

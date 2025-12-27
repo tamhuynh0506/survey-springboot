@@ -16,8 +16,8 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ApiResponse<Object>> handleApiException(ApiException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> handleApiException(Exception ex) {
         return ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(
                 error -> errors.put(error.getField(), error.getDefaultMessage()));
 
-        return ApiResponse.invalidMethodArguments("Invalid arguments", errors);
+        return ApiResponse.invalidData("Invalid arguments", errors);
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
@@ -49,5 +49,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ApiResponse<Object>> handleMissingRequestParamException(MissingServletRequestParameterException ex) {
         return ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(BulkSurveyPublishException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBulkSurveyPublishException(BulkSurveyPublishException ex) {
+        return ApiResponse.invalidData(ex.getMessage(), ex.getInvalidItems());
     }
 }

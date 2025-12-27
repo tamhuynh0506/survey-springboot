@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,12 +33,19 @@ public class SurveyController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<ApiResponse< Page<SurveyDTO>>> getSurveys(
+    public ResponseEntity<ApiResponse<Page<SurveyDTO>>> getSurveys(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sortBy,
             @RequestParam(defaultValue = "asc") String direction
     ) {
         return ApiResponse.success("Success", surveyService.getAllSurveys(page, size, sortBy, direction));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/publish")
+    public ResponseEntity<ApiResponse<String>> publishSurveys(@RequestBody List<UUID> surveyIds) {
+        surveyService.publishSurveys(surveyIds);
+        return ApiResponse.success();
     }
 }

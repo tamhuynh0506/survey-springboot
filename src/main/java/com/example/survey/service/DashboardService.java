@@ -2,6 +2,7 @@ package com.example.survey.service;
 
 import com.example.survey.dto.dashboard.DashboardHighLevelDTO;
 import com.example.survey.dto.dashboard.DashboardSurveysOverviewDTO;
+import com.example.survey.entity.Survey.SurveyStatus;
 import com.example.survey.repository.SurveyRepository;
 import com.example.survey.repository.UserRepository;
 import com.example.survey.repository.UserSubmissionRepository;
@@ -22,7 +23,7 @@ public class DashboardService {
     public DashboardHighLevelDTO getHighLevel() {
         return new DashboardHighLevelDTO(
                 surveyRepository.count(),
-                surveyRepository.countByPublished(true),
+                surveyRepository.countByStatus(SurveyStatus.PUBLISHED),
                 userSubmissionRepository.count(),
                 userRepository.count()
         );

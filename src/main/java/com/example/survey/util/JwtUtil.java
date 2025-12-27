@@ -44,29 +44,26 @@ public class JwtUtil {
     }
 
     public UUID extractUserIdFromAccess(String accessToken) {
-        return UUID.fromString(
-            Jwts.parser()
-                .verifyWith(ACCESS_KEY)
-                .build()
-                .parseSignedClaims(accessToken)
-                .getPayload()
-                .getSubject()
-        );
+        return this.extractSubject(ACCESS_KEY, accessToken);
     }
 
     public UUID extractUserIdFromRefresh(String refreshToken) {
+        return this.extractSubject(REFRESH_KEY, refreshToken);
+    }
+
+    private UUID extractSubject(SecretKey key, String token) {
         return UUID.fromString(
             Jwts.parser()
-                .verifyWith(REFRESH_KEY)
+                .verifyWith(key)
                 .build()
-                .parseSignedClaims(refreshToken)
+                .parseSignedClaims(token)
                 .getPayload()
                 .getSubject()
         );
     }
 
     public String extractEmailFromAccess(String accessToken) {
-        return extractAllClaims(accessToken).get("email", String.class);
+        return this.extractAllClaims(accessToken).get("email", String.class);
     }
 
     public Claims extractAllClaims(String token) {
