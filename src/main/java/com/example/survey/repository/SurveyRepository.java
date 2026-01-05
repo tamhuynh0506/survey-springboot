@@ -2,7 +2,7 @@ package com.example.survey.repository;
 
 import com.example.survey.dto.dashboard.DashboardSurveysOverviewDTO;
 import com.example.survey.entity.Survey;
-import com.example.survey.entity.Survey.SurveyStatus;
+import com.example.survey.enums.SurveyStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

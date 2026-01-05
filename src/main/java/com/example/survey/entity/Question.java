@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.survey.enums.QuestionType;
+
 @Entity
 @Getter
 @Setter
@@ -19,15 +21,11 @@ public class Question {
     private String text;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private QuestionType type;
 
     @ElementCollection
     private List<String> options = new ArrayList<>();
 
     @ManyToOne
     private Survey survey;
-
-    public enum Type {
-        TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
-    }
 }

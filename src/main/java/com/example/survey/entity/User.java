@@ -7,6 +7,8 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.UUID;
 
+import com.example.survey.enums.UserRole;
+
 @Entity
 @Table(name = "app_user")
 @Getter
@@ -35,9 +37,5 @@ public class User {
     private Date resetPasswordExpiry;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
-
-    public enum Role {
-        USER, ADMIN
-    }
+    private UserRole role;
 }

@@ -2,7 +2,7 @@ package com.example.survey.service;
 
 import com.example.survey.dto.dashboard.DashboardHighLevelDTO;
 import com.example.survey.dto.dashboard.DashboardSurveysOverviewDTO;
-import com.example.survey.entity.Survey.SurveyStatus;
+import com.example.survey.enums.SurveyStatus;
 import com.example.survey.repository.SurveyRepository;
 import com.example.survey.repository.UserRepository;
 import com.example.survey.repository.UserSubmissionRepository;

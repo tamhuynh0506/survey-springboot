@@ -3,7 +3,7 @@ package com.example.survey.service;
 import com.example.survey.dto.InvalidSurveyPublishItem;
 import com.example.survey.dto.SurveyDTO;
 import com.example.survey.entity.Survey;
-import com.example.survey.entity.Survey.SurveyStatus;
+import com.example.survey.enums.SurveyStatus;
 import com.example.survey.exception.BulkSurveyPublishException;
 import com.example.survey.exception.NotFoundException;
 import com.example.survey.mapper.SurveyMapper;

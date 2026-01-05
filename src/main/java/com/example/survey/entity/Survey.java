@@ -8,6 +8,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.survey.enums.SurveyStatus;
+
 @Entity
 @Getter
 @Setter
@@ -28,12 +30,6 @@ public class Survey {
 
     @Enumerated(EnumType.STRING)
     private SurveyStatus status = SurveyStatus.DRAFT;
-
-    public enum SurveyStatus {
-        DRAFT,      // Created but not visible
-        PUBLISHED,  // Live and accepting responses
-        CLOSED      // No longer accepts responses
-    }
 
     private Instant publishedAt;
     private Instant closedAt;

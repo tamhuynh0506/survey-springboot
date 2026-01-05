@@ -1,6 +1,7 @@
 package com.example.survey.dto;
 
-import com.example.survey.entity.User;
+import com.example.survey.enums.UserRole;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +13,5 @@ public class UserDTO {
     private UUID id;
     private String name;
     private String email;
-    private User.Role role;
+    private UserRole role;
 }
